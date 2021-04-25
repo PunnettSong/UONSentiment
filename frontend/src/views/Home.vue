@@ -1,15 +1,12 @@
 <template>
   <AddReport v-show="showAddReport" @add-report="addReport" />
-  <Reports
-    @toggle-reminder="toggleReminder"
-    @delete-report="deleteReport"
-    :reports="reports"
-  />
+  <Reports @delete-report="deleteReport" :reports="reports" />
 </template>
 
 <script>
 import Reports from '../components/Reports'
 import AddReport from '../components/AddReport'
+import axios from 'axios';
 
 export default {
   name: 'Home',
@@ -27,6 +24,27 @@ export default {
   },
   methods: {
     async addReport(report) {
+
+      /*const json = JSON.stringify()
+
+      let formData = new FormData();
+      formData.append('file', file);
+      formData.append('name', "myFile");
+
+      axios.post('api/reports/create',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      ).then(function(){
+        console.log('SUCCESS!!');
+      })
+       .catch(function(){
+        console.log('FAILURE!!');
+       });*/
+
       const res = await fetch('api/reports/create', {
         method: 'POST',
         headers: {
@@ -38,6 +56,7 @@ export default {
       const data = await res.json()
 
       this.reports = [...this.reports, data]
+
     },
     async deleteReport(id) {
       if (confirm('Are you sure?')) {

@@ -19,6 +19,6 @@ export default {
   components: {
     Report,
   },
-  emits: ['delete-report', 'toggle-reminder'],
+  emits: ['delete-report'],
 }
 </script>

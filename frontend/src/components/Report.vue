@@ -1,16 +1,11 @@
 <template>
-  <div
-    @click="$emit('toggle-reminder', report.id)"
-    :class="[report.reminder ? 'reminder' : '', 'report']">
-    <h3>
+  <div class="report">
+    <h3 @click="$emit()">
       {{ report.name }}
       <i @click="$emit('delete-report', report.id)" class="fas fa-times"></i>
     </h3>
     <p>{{ report.day }}</p>
-    <p>{{ report.selectedFileName }}</p>
-
   </div>
-
 </template>
 
 <script>

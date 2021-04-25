@@ -1,4 +1,3 @@
-
 <template>
   <form @submit="onSubmit" class="add-form">
     <div class="form-control">
@@ -14,44 +13,46 @@
         placeholder="Add Day & Time"
       />
     </div>
-    <!--div class="form-control form-control-check">
-      <label>Set to analyse</label>
-      <input type="checkbox" v-model="reminder" name="reminder" />
-    </div-->
 
-    <div id="app">
-      <input type="file" @change="onFileSelected" />
+    <div class="form-control">
+      <label>File</label>
+        <input type="file" id="file" ref="file" item="file" name="file" @change="onFilePicked" />
     </div>
 
-    <input type="submit" value="Save Report" class="btn btn-block" />
+    <div>
+      <table id="tbl-data"></table>
+    </div>
+    <input type="submit" value="Analyse Report" class="btn btn-block" />
   </form>
+  
 </template>
 
 <script>
 
-import readXlsxFile from 'read-excel-file'
-import axios from 'axios'
+import readXlsxFile from 'read-excel-file';
+import axios from 'axios';
 
 export default {
 
   name: 'AddReport',
+
   data() {
     return {
-      name: '',
-      day: '',
-      reminder: false,
-      selectedFile: null
+      name: "",
+      day: "",
+      url: ""
     }
   },
-  
-  methods: {
 
-    onFileSelected(event) {
-      this.selectedFile = event.target.files[0]
-    },
+  methods:{
 
-    onUpload(){
-
+    onFilePicked(event){
+      const files = event.target.files
+      const fileReader = new FileReader()
+      fileReader.addEventListener('load', () => {
+        this.url = fileReader.result
+      })
+      this.excel = fileReader.readAsDataURL(files[0])
     },
 
     onSubmit(e) {
@@ -66,26 +67,19 @@ export default {
         // id: Math.floor(Math.random() * 100000),
         name: this.name,
         day: this.day,
-        reminder: this.reminder,
-        selectedFileName: this.selectedFile.name
+        excel: this.excel,
+        url: this.url
+        
       }
 
-      /*const fd = new FormData();
-      fd.append('file', this.selectedFile, this.selectedFile.name)
-      axios.post('', fd)
-        .then(res => {
-          console.log(res)
-        });*/
-
       this.$emit('add-report', newReport)
-
       //Empty the boxes
       this.name = ''
       this.day = ''
-      this.reminder = false
-      this.selectedFileName = ''
-    }
-  },
+      this.excel = null
+      this.url = ''
+    },
+  }
 }
 
 </script>
@@ -124,5 +118,22 @@ export default {
 .form-control-check input {
   flex: 2;
   height: 20px;
+}
+
+.excel-upload-input{
+  display: none;
+  z-index: -9999;
+}
+.drop{
+  border: 2px dashed #bbb;
+  width: 150px;
+  height: 160px;
+  line-height: 160px;
+  margin: 0 auto;
+  font-size: 10px;
+  border-radius: 5px;
+  text-align: center;
+  color: #bbb;
+  position: relative;
 }
 </style>
